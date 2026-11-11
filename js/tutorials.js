@@ -1,0 +1,57 @@
+/* Tutoriais vinculados a exercícios.
+   REGRA: o registro abaixo só contém itens que foram conferidos em fonte oficial (data em "verif").
+   Nada é inventado: duração/minutagem ficam "não informada" quando não foram confirmadas.
+   Vídeos não são baixados nem redistribuídos: só link e player incorporado (youtube-nocookie), carregado após clique. */
+const TUT_REG=[
+{id:"tg-usx",kind:"video",yt:"R9ZFlGDc6hI",
+ title:"Capítulo público do Pickslanting Primer (seção Wrist Motion): movimento USX / pickslant descendente",
+ titleNote:"Título exato no YouTube não confirmado; a descrição vem da página oficial que o incorpora.",
+ canal:"Troy Grady (Cracking the Code)",tecnica:"Palhetada alternada: movimento com escape da palheta na subida (USX) e ajuste do pickslant",
+ ex:["pk1","pk2","pk3"],dur:null,min:null,idioma:"Inglês",nivel:"Intermediário",verif:"2026-11-11",
+ fonte:"https://troygrady.com/2019/06/20/mastering-wrist-motion/",
+ obs:"Material especializado e detalhado, de quem pesquisa mecânica de palhetada. O próprio autor trata USX como uma das mecânicas possíveis (existe também a DSX), então use como referência para observar a sua mão, não como regra única.",
+ observar:"Na descrição oficial, USX é o movimento em que a palheta se afasta do corpo da guitarra na palhetada para cima e se aproxima na palhetada para baixo.",
+ detalhe:"A relação entre o movimento da articulação e o ângulo da palheta (pickslant): segundo o autor, o pickslant serve para compensar a inclinação do movimento e deixar o ataque uniforme.",
+ reproduzir:"Em corda solta, devagar, tente perceber o caminho que a sua palheta faz nas duas direções e filme a mão de perto.",
+ evitar:"Forçar um ângulo de palheta sem relação com o movimento que a sua mão realmente faz.",
+ aplicar:"Depois do vídeo, volte ao exercício e compare o som de ↓ e ↑ na gravação; na troca de corda, observe onde a palheta prende."},
+{id:"tg-wrist-art",kind:"artigo",url:"https://troygrady.com/2019/06/20/mastering-wrist-motion/",title:"Mastering Wrist Motion",canal:"Cracking the Code (Troy Grady)",
+ tecnica:"Movimento do pulso na palhetada: USX, DSX e pickslant",ex:["pk1","pk2"],idioma:"Inglês",nivel:"Intermediário",verif:"2026-11-11",dataPub:"2019-06-20",
+ obs:"Texto de apresentação da seção sobre pulso; útil para entender os termos antes de assistir ao vídeo.",
+ observar:"Definições de USX, DSX e pickslant.",detalhe:"A distinção entre o ângulo da palheta e o movimento que a mão faz.",reproduzir:"Nada a reproduzir: é leitura.",evitar:"Tratar a terminologia como método único.",aplicar:"Use para nomear o que você observa na sua filmagem."},
+{id:"pg-bursts",kind:"artigo",url:"https://www.premierguitar.com/lessons/beginner/speed-burst-guitar",title:"Can “Speed Bursts” Actually Help Your Chops?",canal:"Premier Guitar",
+ tecnica:"Speed bursts: rajadas curtas de notas com pausas",ex:["te2","pk3"],idioma:"Inglês",nivel:"Iniciante/Intermediário",verif:"2026-11-11",
+ obs:"Lição em texto. A página lista como objetivos: melhorar a mão direita, usar pausas frequentes para evitar lesão e isolar fraquezas de palhetada.",
+ observar:"Como a lição organiza as rajadas e as pausas.",detalhe:"O papel das pausas (descanso entre rajadas).",reproduzir:"Aplique o formato ao seu exercício com poucas repetições e descanso.",evitar:"Repetir rajadas sem pausa até acumular tensão.",aplicar:"No exercício da sextina, use rajadas de 1 tempo e descanse."}
+];
+const GPTut=(function(){
+"use strict";
+const store=()=>GPX.ext("tut",{user:[]});
+const ytId=u=>{const m=String(u||"").trim().match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})(?![A-Za-z0-9_-])/);return m?m[1]:null};
+const secs=t=>{const m=String(t||"").trim().match(/^(?:(\d+):)?(\d{1,2}):(\d{2})$|^(\d{1,2}):(\d{2})$|^(\d+)$/);if(!m)return null;if(m[6])return+m[6];if(m[4])return+m[4]*60+ +m[5];return(+m[1]||0)*3600+ +m[2]*60+ +m[3]};
+const hms=s=>s==null?"não informada":Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+let n=0;
+function card(t,mine){const id="tt"+(++n),yid=t.yt||ytId(t.url);
+ const links=t.kind==="artigo"?`<a class="btn" href="${esc(t.url)}" target="_blank" rel="noopener noreferrer">Abrir artigo</a>`:`<a class="btn" href="https://www.youtube.com/watch?v=${yid}${t.min?"&t="+t.min+"s":""}" target="_blank" rel="noopener noreferrer">Abrir no YouTube</a><button data-tt="load" data-yid="${yid}" data-start="${t.min||0}" data-box="${id}">Carregar player aqui</button>`;
+ return`<div class="tut ${mine?"mine":""}"><div class="row"><b style="flex:1">${esc(t.title)}</b><span class="tag">${t.kind==="artigo"?"artigo":"vídeo"}</span>${mine?'<span class="tag">adicionado por você · não verificado pelo site</span>':""}</div>
+ ${t.titleNote?`<p class="mu">${esc(t.titleNote)}</p>`:""}
+ <dl class="lib"><dt>Canal / fonte</dt><dd>${esc(t.canal||"não informado")}</dd><dt>Técnica ensinada</dt><dd>${esc(t.tecnica||"não informada")}</dd><dt>Duração</dt><dd>${t.dur?esc(t.dur):"não informada"}</dd><dt>Minutagem relevante</dt><dd>${t.min!=null&&t.min!==""?hms(t.min):"não informada"}</dd><dt>Idioma / nível</dt><dd>${esc(t.idioma||"não informado")} · ${esc(t.nivel||"não informado")}</dd><dt>Última verificação</dt><dd>${esc(t.verif||"nunca")}</dd><dt>Qualidade didática</dt><dd>${esc(t.obs||"sem observação")}</dd></dl>
+ ${t.observar?`<details><summary>O que observar e como aplicar</summary><ul><li><b>O que observar:</b> ${esc(t.observar)}</li><li><b>Detalhe técnico:</b> ${esc(t.detalhe||"")}</li><li><b>O que reproduzir:</b> ${esc(t.reproduzir||"")}</li><li><b>O que evitar:</b> ${esc(t.evitar||"")}</li><li><b>Como aplicar no exercício:</b> ${esc(t.aplicar||"")}</li></ul></details>`:""}
+ <div class="row">${links}${mine?`<button data-tt="del" data-id="${t.id}">Remover</button>`:""}</div><div id="${id}"></div>${t.fonte?`<p class="mu">Fonte da verificação: <a href="${esc(t.fonte)}" target="_blank" rel="noopener noreferrer">página oficial</a>.</p>`:""}</div>`}
+function form(exId){const id="ttf"+(++n);
+ return`<details class="tut-add"><summary>Adicionar um tutorial que você escolheu</summary><form data-ttform="${exId||""}" id="${id}" novalidate><div class="grid"><div><label>Link do YouTube</label><input name="url" placeholder="https://www.youtube.com/watch?v=…" required></div><div><label>Título do vídeo</label><input name="title" required></div><div><label>Canal</label><input name="canal"></div><div><label>Técnica ensinada</label><input name="tecnica"></div><div><label>Minutagem (ex.: 3:25)</label><input name="min"></div><div><label>Duração (opcional)</label><input name="dur"></div><div><label>Idioma</label><input name="idioma" value="Português"></div><div><label>Nível</label><select name="nivel"><option>Iniciante</option><option>Intermediário</option><option>Avançado</option></select></div></div><label>Observação sobre a qualidade didática</label><input name="obs"><button class="pri" type="submit">Salvar tutorial</button><p class="mu">Fica só no seu navegador, marcado como não verificado. O site não confere o conteúdo do vídeo.</p></form></details>`}
+function block(exIds,o){exIds=(exIds||[]).filter(Boolean);const T=store(),reg=TUT_REG.filter(t=>t.ex.some(e=>exIds.includes(e))),mine=T.user.filter(t=>exIds.includes(t.ex));
+ const name=exIds.length&&typeof BY!=="undefined"&&BY[exIds[0]]?BY[exIds[0]].name:"";
+ const search=name?`<p class="mu">Busca no YouTube (<b>não é um tutorial verificado</b>, só um atalho): <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(name+" guitar tutorial")}" target="_blank" rel="noopener noreferrer">pesquisar “${esc(name)}”</a></p>`:"";
+ const none=!reg.length&&!mine.length?`<p class="mu">Nenhum tutorial verificado corresponde a este exercício ainda. Prefiro dizer isso a ligar um vídeo que não confere com a habilidade.</p>`:"";
+ return none+reg.map(t=>card(t,false)).join("")+mine.map(t=>card(t,true)).join("")+form(exIds[0])+search}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-tt]");if(!b)return;const d=b.dataset;
+ if(d.tt==="load"){const box=document.getElementById(d.box);if(!box||!/^[A-Za-z0-9_-]{11}$/.test(d.yid))return;box.innerHTML=`<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/${d.yid}?rel=0${+d.start?"&start="+(+d.start):""}" title="Vídeo do YouTube" loading="lazy" allow="encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><p class="mu">Player do YouTube (youtube-nocookie.com). Ao carregar, o YouTube recebe a sua visita.</p>`;return}
+ if(d.tt==="del"&&confirm("Remover este tutorial da sua lista?")){const T=store();T.user=T.user.filter(x=>x.id!==d.id);save();show(tab)}});
+document.addEventListener("submit",e=>{const f=e.target;if(!f.dataset||f.dataset.ttform===undefined)return;e.preventDefault();const v=k=>(f.elements[k]&&f.elements[k].value||"").trim(),yid=ytId(v("url"));
+ if(!yid||!v("title")){toast("Informe um link válido do YouTube e o título do vídeo.");return}
+ const m=v("min"),s=m?secs(m):null;if(m&&s===null){toast("Minutagem inválida. Use 3:25 ou 205.");return}
+ const T=store();T.user.push({id:GPX.uid(),kind:"video",yt:yid,url:v("url"),title:v("title").slice(0,160),canal:v("canal").slice(0,80),tecnica:v("tecnica").slice(0,120),ex:f.dataset.ttform,min:s,dur:v("dur").slice(0,20),idioma:v("idioma").slice(0,30),nivel:v("nivel"),verif:"",obs:v("obs").slice(0,240)});save();toast("Tutorial salvo.");show(tab)});
+return{block,card,ytId,secs,REG:TUT_REG};
+})();
+window.GPTut=GPTut;
