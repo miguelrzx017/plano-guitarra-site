@@ -46,3 +46,8 @@ dl.lib{display:grid;grid-template-columns:minmax(120px,32%) 1fr;gap:.25rem .8rem
 .rp-sec{margin-top:.6rem}.rp-why{padding-left:1.1rem}.rp-tech{margin:.4rem 0;padding:.4rem .6rem}
 .tut-add form{margin-top:.5rem}
 @media(max-width:760px){dl.lib{grid-template-columns:1fr}.tn-note{font-size:4.2rem}}
+
+.yt-thumb{position:relative;display:block;width:100%;max-width:480px;padding:0;margin:.5rem 0;border:0;border-radius:8px;overflow:hidden;cursor:pointer;background:none}
+.yt-thumb img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.yt-play{position:absolute;inset:0;margin:auto;width:64px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(220,0,0,.9);color:#fff;font-size:20px}
+.yt-thumb:hover .yt-play{background:#f00}
