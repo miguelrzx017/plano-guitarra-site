@@ -101,7 +101,7 @@ function library(){const r=e=>esc(e);
  return`<h3>Técnicas de guitarra</h3><p class="mu">Consulta permanente. Cada ficha segue os mesmos 12 itens. Há mais de uma forma válida de executar a maioria das técnicas: use o que for confortável e soe limpo.</p>`
  +TECHS.map(t=>`<details class="g c"><summary><b>${r(t.n)}</b></summary><dl class="lib">${LIB_FIELDS.map((f,i)=>`<dt>${i+1}. ${r(f)}</dt><dd>${r(t.f[i])}</dd>`).join("")}</dl></details>`).join("")
  +`<h3>Teoria musical</h3><p class="mu">Conceitos de teoria (o que as notas são) são diferentes de movimentos físicos e de estratégias de estudo.</p>`
- +THEORY.map(t=>`<details class="g c"><summary><b>${r(t[0])}</b></summary><p>${r(t[1])}</p><p><b>No braço:</b> ${r(t[2])}</p><p class="mu">Aplicação: ${r(t[3])}</p></details>`).join("")}
+ +THEORY.map(t=>`<details class="g c"><summary><b>${r(t.n)}</b></summary><p>${r(t.d)}</p><p><b>No braço:</b> ${r(t.f)}</p><p><b>Aplicação musical:</b> ${r(t.ex)}</p><p><b>Como estudar:</b> ${r(t.practice)}</p><p><b>Erro frequente:</b> ${r(t.error)}</p><p><b>Como corrigir:</b> ${r(t.fix)}</p><p class="mu"><b>Relacionado:</b> ${r(t.related)}</p></details>`).join("")}
 
 /* ---------- treinos ---------- */
 const Q={t:"note",cur:null,done:false};
